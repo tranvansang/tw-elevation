@@ -84,14 +84,22 @@ export const shadowDimensionRegressionCoefficients = {
 
 export interface ITWElevationConfig {
 	classPrefix: string
-	color: string
+	baselineColor: {
+		red: number
+		green: number
+		blue: number
+	}
 	umbraOpacity: number
 	penumbraOpacity: number
 	ambientOpacity: number
 }
 
 // https://github.com/material-components/material-components-web/blob/2fb068fb0f7a1b0e038ede3a2ab27a972e5b2ee4/packages/mdc-elevation/_elevation-theme.scss#L37
-export const defaultBaselineColor = '0, 0, 0'
+export const defaultBaselineColor = {
+	red: 0,
+	green: 0,
+	blue: 0,
+}
 export const defaultOpacity = {
 	[ShadowDirection.umbra]: .2,
 	[ShadowDirection.penumbra]: .14,
