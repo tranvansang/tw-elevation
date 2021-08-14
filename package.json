@@ -1,12 +1,14 @@
 {
   "name": "tw-elevation",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "tailwindcss elevation plugin",
   "main": "index.js",
   "repository": "https://github.com/tranvansang/tw-elevation.git",
   "files": [
     "index.js",
-    "config.js"
+    "index.d.ts",
+    "config.js",
+    "config.d.ts"
   ],
   "scripts": {
     "build": "rm -rf index.d.ts index.js && tsc --downlevelIteration --declaration --esModuleInterop --outDir . --lib esnext index.ts"
