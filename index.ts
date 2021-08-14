@@ -3,6 +3,16 @@
 // https://material.io/design/environment/light-shadows.html
 // https://material.io/design/environment/elevation.html
 
+/*
+Component elevation values
+1. Nav drawer: 16dp
+2. App bar: 4dp
+3. Card: 1dp to 8dp
+4. FAB: 6dp
+5. Button: 2dp to 8dp
+6. Dialog: 24dp
+ */
+
 import {
 	defaultBaselineColor,
 	defaultOpacity,
