@@ -16,13 +16,16 @@ Component elevation values
 import {
 	defaultBaselineColor,
 	defaultOpacity,
-	ITWElevationConfig,
 	predefinedShadowDimension,
 	ShadowDimension,
 	shadowDimensionRegressionCoefficients,
 	ShadowDirection,
 	shadowDirectionNames
 } from './config'
+import {hexToHSL} from './util'
+
+const configName = 'twElevation'
+const baselineColorVarName = '--tw-elevation-baseline-color'
 
 const getShadowDimension = (
 	direction: ShadowDirection,
@@ -38,49 +41,52 @@ const getShadowDimension = (
 const boxShadow = (
 	direction: ShadowDirection,
 	elevation: number,
-	{baselineColor: {red, green, blue}, ...config}: ITWElevationConfig
+	config: {
+		umbraOpacity: number
+		penumbraOpacity: number
+		ambientOpacity: number
+	}
 ) => [
 	'0px',
 	`${getShadowDimension(direction, elevation, ShadowDimension.yOffset).toFixed(2)}px`,
 	`${getShadowDimension(direction, elevation, ShadowDimension.blur).toFixed(2)}px`,
 	`${getShadowDimension(direction, elevation, ShadowDimension.spread).toFixed(2)}px`,
-	`rgba(${[
-		red,
-		green,
-		blue,
-		config[`${shadowDirectionNames[direction]}Opacity`]
-	].map(x => x.toFixed(2)).join(', ')})`
+	`hsla(var(${baselineColorVarName})/${config[`${shadowDirectionNames[direction]}Opacity`].toFixed(2)})`
 ].join(' ')
 
-export default ({
-									classPrefix = 'elevation',
-									baselineColor = defaultBaselineColor,
-									umbraOpacity = defaultOpacity[ShadowDirection.umbra],
-									penumbraOpacity = defaultOpacity[ShadowDirection.penumbra],
-									ambientOpacity = defaultOpacity[ShadowDirection.ambient],
-								}: Partial<ITWElevationConfig> = {}) => {
-	const concretedConfig = {
-		classPrefix,
-		baselineColor,
-		umbraOpacity,
-		penumbraOpacity,
-		ambientOpacity,
-	}
-	return ({matchUtilities}) => {
-		matchUtilities(
-			{
-				[classPrefix]: value => ({
-					boxShadow: [
-						ShadowDirection.umbra,
-						ShadowDirection.penumbra,
-						ShadowDirection.ambient,
-					].map(dimension => {
-						const numeric = parseFloat(value)
-						if (isNaN(numeric) || !isFinite(numeric)) return
-						return boxShadow(dimension, numeric, concretedConfig)
-					}).join(', ')
+export default ({matchUtilities, config, addBase}) => {
+
+	const baselineColor = config(`${configName}.baselineColor`) ?? defaultBaselineColor
+	const umbraOpacity = config(`${configName}.opacity.umbra`) ?? defaultOpacity[ShadowDirection.umbra]
+	const penumbraOpacity = config(`${configName}.opacity.penumbra`) ?? defaultOpacity[ShadowDirection.penumbra]
+	const ambientOpacity = config(`${configName}.opacity.ambient`) ?? defaultOpacity[ShadowDirection.ambient]
+
+	addBase({
+		':root': {
+			[baselineColorVarName]: hexToHSL(baselineColor)
+		}
+	})
+	matchUtilities({
+		elevation: value => ({
+			boxShadow: [
+				ShadowDirection.umbra,
+				ShadowDirection.penumbra,
+				ShadowDirection.ambient,
+			].map(dimension => {
+				const numeric = parseFloat(value)
+				if (isNaN(numeric) || !isFinite(numeric)) return
+				return boxShadow(dimension, numeric, {
+					umbraOpacity,
+					penumbraOpacity,
+					ambientOpacity,
 				})
-			},
-		)
-	}
+			}).join(', ')
+		}),
+		['elevation-baseline']: color => {
+			const hslColor = hexToHSL(color)
+			return {
+				[baselineColorVarName]: hslColor
+			}
+		}
+	})
 }

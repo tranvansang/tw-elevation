@@ -8,7 +8,9 @@
     "index.js",
     "index.d.ts",
     "config.js",
-    "config.d.ts"
+    "config.d.ts",
+    "util.js",
+    "util.d.ts"
   ],
   "scripts": {
     "build": "rm -rf index.d.ts index.js && tsc --downlevelIteration --declaration --esModuleInterop --outDir . --lib esnext index.ts"

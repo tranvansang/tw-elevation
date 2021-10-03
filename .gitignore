@@ -9,5 +9,7 @@ index.js
 index.d.ts
 config.js
 config.d.ts
+util.d.ts
+util.js
 
 .idea
