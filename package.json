@@ -15,14 +15,15 @@
   "scripts": {
     "build": "rm -rf index.d.ts index.js && tsc --downlevelIteration --declaration --esModuleInterop --outDir . --lib esnext index.ts --skipLibCheck"
   },
-  "author": "Tran Sang <tr@nsang.me>",
+  "author": "Tran Sang <me@transa.ng>",
   "license": "MIT",
   "devDependencies": {
+    "@types/color-name": "^1.1.1",
     "@types/node": "^16.11.12",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.3"
   },
   "dependencies": {
-    "culori": "^2.0.3"
+    "color-name": "^1.1.4"
   }
 }

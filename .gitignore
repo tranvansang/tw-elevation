@@ -11,5 +11,6 @@ config.js
 config.d.ts
 util.d.ts
 util.js
+node_modules
 
 .idea

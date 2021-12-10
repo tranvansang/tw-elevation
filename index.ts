@@ -14,19 +14,17 @@ Component elevation values
  */
 
 import {
-	allDirections,
-	defaultColor,
-	defaultOpacity,
-	Dimension,
-	Direction,
-	directionNames,
-	elevationLimit,
-	predefinedShadowDimension,
-	shadowDimensionRegressionCoefficients
+    allDirections,
+    defaultColor,
+    defaultOpacity,
+    Dimension,
+    Direction,
+    directionNames,
+    elevationLimit,
+    predefinedShadowDimension,
+    shadowDimensionRegressionCoefficients
 } from './config'
-import {flattenColorPalette, floatToStr} from './util'
-// @ts-ignore
-import {formatCss, parse} from 'culori'
+import {flattenColorPalette, floatToStr, formatColor, parseColor} from './util'
 
 const getDimension = (
     dir: Direction,
@@ -60,20 +58,24 @@ export default {
     },
     plugins: [
         ({matchUtilities, config, theme}) => {
-			const configName = 'twElevation'
-			const varPrefix = '--tw-elevation'
+            const configName = 'twElevation'
+            const varPrefix = '--tw-elevation'
 
-			const color = config(`${configName}.baselineColor`) ?? defaultColor
-			const parsed = parse(color)
-			const opacities = Object.fromEntries(
-                allDirections.map(dir => config(`${configName}.opacity.${directionNames[dir]}`) ?? defaultOpacity[dir])
+            const color = config(`${configName}.baselineColor`) ?? defaultColor
+            const parsed = parseColor(color)
+            const opacities = Object.fromEntries(
+                allDirections.map(dir => [dir, config(`${configName}.opacity.${directionNames[dir]}`) ?? defaultOpacity[dir]])
             )
-			const defaultColors = Object.fromEntries(
-				allDirections.map(dir => {
-					parsed.alpha = opacities[dir]
-					return formatCss(parsed)
-				})
-			)
+            const defaultColors = Object.fromEntries(
+                allDirections.map(dir => [
+                        dir,
+                        formatColor({
+                            ...opacities[dir],
+                            alpha: opacities[dir]
+                        })
+                    ]
+                )
+            )
             matchUtilities(
                 {
                     elevation(value) {
@@ -91,15 +93,16 @@ export default {
             matchUtilities(
                 {
                     elevation(color) {
-                        const parsed = parse(color)
+                        const parsed = parseColor(color)
                         return Object.fromEntries(
-                            allDirections.map(dir => {
-                                parsed.alpha = opacities[dir]
-                                return [
+                            allDirections.map(dir => [
                                     `${varPrefix}-${directionNames[dir]}`,
-                                    formatCss(parsed)
+                                    formatColor({
+                                        ...parsed,
+                                        alpha: opacities[dir]
+                                    })
                                 ]
-                            })
+                            )
                         )
                     }
                 },

@@ -49,6 +49,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/color-name@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@types/color-name@npm:1.1.1"
+  checksum: b71fcad728cc68abcba1d405742134410c8f8eb3c2ef18113b047afca158ad23a4f2c229bcf71a38f4a818dead375c45b20db121d0e69259c2d81e97a740daa6
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:^16.11.12":
   version: 16.11.12
   resolution: "@types/node@npm:16.11.12"
@@ -79,17 +86,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"color-name@npm:^1.1.4":
+  version: 1.1.4
+  resolution: "color-name@npm:1.1.4"
+  checksum: b0445859521eb4021cd0fb0cc1a75cecf67fceecae89b63f62b201cca8d345baf8b952c966862a9d9a2632987d4f6581f0ec8d957dfacece86f0a7919316f610
+  languageName: node
+  linkType: hard
+
 "create-require@npm:^1.1.0":
   version: 1.1.1
   resolution: "create-require@npm:1.1.1"
   checksum: a9a1503d4390d8b59ad86f4607de7870b39cad43d929813599a23714831e81c520bddf61bcdd1f8e30f05fd3a2b71ae8538e946eb2786dc65c2bbc520f692eff
-  languageName: node
-  linkType: hard
-
-"culori@npm:^2.0.3":
-  version: 2.0.3
-  resolution: "culori@npm:2.0.3"
-  checksum: 764ec03a16dc07b2a53f7f50f2cd034db9db06c85b01ab55a0dd3699e4c35821f2a5af5516f4bfd0afdf3d446ea8431df7742cf4ed7f14ae44ed5979a8010ade
   languageName: node
   linkType: hard
 
@@ -147,8 +154,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "tw-elevation@workspace:."
   dependencies:
+    "@types/color-name": ^1.1.1
     "@types/node": ^16.11.12
-    culori: ^2.0.3
+    color-name: ^1.1.4
     ts-node: ^10.4.0
     typescript: ^4.5.3
   languageName: unknown
