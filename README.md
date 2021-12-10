@@ -14,8 +14,9 @@ export default {
 ```
 
 - Class names: `.elevation-[0]`, `.elevation-[1]`, ...
-- To change baseline color, use class: `.elevation-baseline-[#888]`.
+- To change baseline color, use class: `.elevation-[#888]`.
+- All themed colors are support: `.elevation-red-500`.
+- For color with opacity, for example: `.elevation-red-500/50`, the opacity will be ignored.
 - Screenshot:
 
 ![tw-elevation screenshot](https://github.com/tranvansang/tw-elevation/blob/master/screenshot.png?raw=true)
-![tw-elevation screenshot red](https://github.com/tranvansang/tw-elevation/blob/master/screenshot-red.png?raw=true)
