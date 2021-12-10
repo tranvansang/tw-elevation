@@ -26,20 +26,27 @@ export const elevationLimit = Math.min(
 
 // https://en.wikipedia.org/wiki/Umbra,_penumbra_and_antumbra
 // https://www.youtube.com/watch?v=SvSHx3XWRik
-export const enum ShadowDirection {
+export const enum Direction {
 	umbra,
 	penumbra,
 	// antumbra, // not used
 	ambient,
 }
 
-export const shadowDirectionNames = {
-	[ShadowDirection.umbra]: 'umbra',
-	[ShadowDirection.penumbra]: 'penumbra',
-	[ShadowDirection.ambient]: 'ambient',
+export const allDirections = [
+	Direction.umbra,
+	Direction.penumbra,
+	// Direction.antumbra,
+	Direction.ambient,
+] as const
+
+export const directionNames = {
+	[Direction.umbra]: 'umbra',
+	[Direction.penumbra]: 'penumbra',
+	[Direction.ambient]: 'ambient',
 } as const
 
-export const enum ShadowDimension {
+export const enum Dimension {
 	// xOffset, // always 0
 	yOffset,
 	blur,
@@ -47,46 +54,46 @@ export const enum ShadowDimension {
 }
 
 export const predefinedShadowDimension = {
-	[ShadowDirection.umbra]: {
-		[ShadowDimension.yOffset]: umbraY,
-		[ShadowDimension.blur]: umbraBlur,
-		[ShadowDimension.spread]: umbraSpread,
+	[Direction.umbra]: {
+		[Dimension.yOffset]: umbraY,
+		[Dimension.blur]: umbraBlur,
+		[Dimension.spread]: umbraSpread,
 	},
-	[ShadowDirection.penumbra]: {
-		[ShadowDimension.yOffset]: penumbraY,
-		[ShadowDimension.blur]: penumbraBlur,
-		[ShadowDimension.spread]: penumbraSpread,
+	[Direction.penumbra]: {
+		[Dimension.yOffset]: penumbraY,
+		[Dimension.blur]: penumbraBlur,
+		[Dimension.spread]: penumbraSpread,
 	},
-	[ShadowDirection.ambient]: {
-		[ShadowDimension.yOffset]: ambientY,
-		[ShadowDimension.blur]: ambientBlur,
-		[ShadowDimension.spread]: ambientSpread,
+	[Direction.ambient]: {
+		[Dimension.yOffset]: ambientY,
+		[Dimension.blur]: ambientBlur,
+		[Dimension.spread]: ambientSpread,
 	},
 } as const
 
 export const shadowDimensionRegressionCoefficients = {
-	[ShadowDirection.umbra]: {
-		[ShadowDimension.yOffset]: {intercept: 1.0770563, alpha: 0.4298701},
-		[ShadowDimension.blur]: {intercept: 0.7292308, alpha: 0.5892308},
-		[ShadowDimension.spread]: {intercept: -0.4338462, alpha: -0.2738462},
+	[Direction.umbra]: {
+		[Dimension.yOffset]: {intercept: 1.0770563, alpha: 0.4298701},
+		[Dimension.blur]: {intercept: 0.7292308, alpha: 0.5892308},
+		[Dimension.spread]: {intercept: -0.4338462, alpha: -0.2738462},
 	},
-	[ShadowDirection.penumbra]: {
-		[ShadowDimension.yOffset]: {intercept: 0, alpha: 1},
-		[ShadowDimension.blur]: {intercept: -1.221997, alpha: 1.601769},
-		[ShadowDimension.spread]: {intercept: -0.3230769, alpha: 0.1469231},
+	[Direction.penumbra]: {
+		[Dimension.yOffset]: {intercept: 0, alpha: 1},
+		[Dimension.blur]: {intercept: -1.221997, alpha: 1.601769},
+		[Dimension.spread]: {intercept: -0.3230769, alpha: 0.1469231},
 	},
-	[ShadowDirection.ambient]: {
-		[ShadowDimension.yOffset]: {intercept: -0.24, alpha: 0.39},
-		[ShadowDimension.blur]: {intercept: 1.251947, alpha: 1.822970},
-		[ShadowDimension.spread]: {intercept: -1.0892308, alpha: 0.3807692},
+	[Direction.ambient]: {
+		[Dimension.yOffset]: {intercept: -0.24, alpha: 0.39},
+		[Dimension.blur]: {intercept: 1.251947, alpha: 1.822970},
+		[Dimension.spread]: {intercept: -1.0892308, alpha: 0.3807692},
 	},
 } as const
 
 // https://github.com/material-components/material-components-web/blob/2fb068fb0f7a1b0e038ede3a2ab27a972e5b2ee4/packages/mdc-elevation/_elevation-theme.scss#L37
-export const defaultBaselineColor = '#000'
+export const defaultColor = '#000'
 
 export const defaultOpacity = {
-	[ShadowDirection.umbra]: .2,
-	[ShadowDirection.penumbra]: .14,
-	[ShadowDirection.ambient]: .12,
+	[Direction.umbra]: .2,
+	[Direction.penumbra]: .14,
+	[Direction.ambient]: .12,
 }

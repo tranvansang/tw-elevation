@@ -14,79 +14,98 @@ Component elevation values
  */
 
 import {
-	defaultBaselineColor,
+	allDirections,
+	defaultColor,
 	defaultOpacity,
+	Dimension,
+	Direction,
+	directionNames,
+	elevationLimit,
 	predefinedShadowDimension,
-	ShadowDimension,
-	shadowDimensionRegressionCoefficients,
-	ShadowDirection,
-	shadowDirectionNames
+	shadowDimensionRegressionCoefficients
 } from './config'
-import {floatToStr, hexToHSL} from './util'
+import {flattenColorPalette, floatToStr} from './util'
+// @ts-ignore
+import {formatCss, parse} from 'culori'
 
-const configName = 'twElevation'
-const baselineColorVarName = '--tw-elevation-baseline-color'
-
-const getShadowDimension = (
-	direction: ShadowDirection,
-	elevation: number,
-	dimension: ShadowDimension
+const getDimension = (
+    dir: Direction,
+    level: number,
+    dimension: Dimension
 ): number => {
-	const predefinedValues = predefinedShadowDimension[direction][dimension]
-	if (elevation < predefinedValues.length && elevation >= 0) return predefinedValues[elevation]
-	const {intercept, alpha} = shadowDimensionRegressionCoefficients[direction][dimension]
-	return intercept + alpha * elevation
+    const predefinedValues = predefinedShadowDimension[dir][dimension]
+    if (level < predefinedValues.length && level >= 0) return predefinedValues[level]
+    const {intercept, alpha} = shadowDimensionRegressionCoefficients[dir][dimension]
+    return intercept + alpha * level
 }
 
 const boxShadow = (
-	direction: ShadowDirection,
-	elevation: number,
-	config: {
-		umbraOpacity: number
-		penumbraOpacity: number
-		ambientOpacity: number
-	}
+    dir: Direction,
+    level: number,
+    color: string,
 ) => [
-	'0px',
-	`${floatToStr(getShadowDimension(direction, elevation, ShadowDimension.yOffset))}px`,
-	`${floatToStr(getShadowDimension(direction, elevation, ShadowDimension.blur))}px`,
-	`${floatToStr(getShadowDimension(direction, elevation, ShadowDimension.spread))}px`,
-	`hsla(var(${baselineColorVarName})/${floatToStr(config[`${shadowDirectionNames[direction]}Opacity`])})`
+    '0px',
+    ...[
+        Dimension.yOffset,
+        Dimension.blur,
+        Dimension.spread,
+    ].map(dimension => `${floatToStr(getDimension(dir, level, dimension))}px`),
+    color,
 ].join(' ')
 
-export default ({matchUtilities, config, addBase}) => {
+export default {
+    theme: {
+        elevation: Object.fromEntries([...Array(elevationLimit).keys()].map(elevation => [elevation, String(elevation)])),
+        elevationColor: ({theme}) => theme('colors'),
+    },
+    plugins: [
+        ({matchUtilities, config, theme}) => {
+			const configName = 'twElevation'
+			const varPrefix = '--tw-elevation'
 
-	const baselineColor = config(`${configName}.baselineColor`) ?? defaultBaselineColor
-	const umbraOpacity = config(`${configName}.opacity.umbra`) ?? defaultOpacity[ShadowDirection.umbra]
-	const penumbraOpacity = config(`${configName}.opacity.penumbra`) ?? defaultOpacity[ShadowDirection.penumbra]
-	const ambientOpacity = config(`${configName}.opacity.ambient`) ?? defaultOpacity[ShadowDirection.ambient]
-
-	addBase({
-		':root': {
-			[baselineColorVarName]: hexToHSL(baselineColor)
-		}
-	})
-	matchUtilities({
-		elevation: value => ({
-			boxShadow: [
-				ShadowDirection.umbra,
-				ShadowDirection.penumbra,
-				ShadowDirection.ambient,
-			].map(dimension => {
-				const numeric = parseFloat(value)
-				if (isNaN(numeric) || !isFinite(numeric)) return
-				return boxShadow(dimension, numeric, {
-					umbraOpacity,
-					penumbraOpacity,
-					ambientOpacity,
+			const color = config(`${configName}.baselineColor`) ?? defaultColor
+			const parsed = parse(color)
+			const opacities = Object.fromEntries(
+                allDirections.map(dir => config(`${configName}.opacity.${directionNames[dir]}`) ?? defaultOpacity[dir])
+            )
+			const defaultColors = Object.fromEntries(
+				allDirections.map(dir => {
+					parsed.alpha = opacities[dir]
+					return formatCss(parsed)
 				})
-			}).join(', ')
-		}),
-		['elevation-baseline']: color => {
-			const hslColor = hexToHSL(color)
-			return {
-				[baselineColorVarName]: hslColor
-			}
-		}
-	})
+			)
+            matchUtilities(
+                {
+                    elevation(value) {
+                        return {
+                            boxShadow: allDirections.map(dir => {
+                                const numeric = parseFloat(value)
+                                if (isNaN(numeric) || !isFinite(numeric)) return
+                                return boxShadow(dir, numeric, `var(${varPrefix}-${directionNames[dir]}, ${defaultColors[dir]})`)
+                            }).join(', ')
+                        }
+                    },
+                },
+                {values: flattenColorPalette(theme('elevation')), type: ['number']}
+            )
+            matchUtilities(
+                {
+                    elevation(color) {
+                        const parsed = parse(color)
+                        return Object.fromEntries(
+                            allDirections.map(dir => {
+                                parsed.alpha = opacities[dir]
+                                return [
+                                    `${varPrefix}-${directionNames[dir]}`,
+                                    formatCss(parsed)
+                                ]
+                            })
+                        )
+                    }
+                },
+                {values: flattenColorPalette(theme('elevationColor')), type: ['color']}
+            )
+        }
+    ]
 }
+
