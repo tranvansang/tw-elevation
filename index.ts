@@ -51,64 +51,59 @@ const boxShadow = (
     color,
 ].join(' ')
 
-export default {
-    theme: {
-        elevation: Object.fromEntries([...Array(elevationLimit).keys()].map(elevation => [elevation, String(elevation)])),
-        elevationColor: ({theme}) => theme('colors'),
-    },
-    plugins: [
-        ({matchUtilities, config, theme}) => {
-            const configName = 'twElevation'
-            const varPrefix = '--tw-elevation'
+export default ({matchUtilities, config, theme}) => {
+    const configName = 'twElevation'
+    const varPrefix = '--tw-elevation'
 
-            const color = config(`${configName}.baselineColor`) ?? defaultColor
-            const parsed = parseColor(color)
-            const opacities = Object.fromEntries(
-                allDirections.map(dir => [dir, config(`${configName}.opacity.${directionNames[dir]}`) ?? defaultOpacity[dir]])
-            )
-            const defaultColors = Object.fromEntries(
-                allDirections.map(dir => [
-                        dir,
-                        formatColor({
-                            ...opacities[dir],
-                            alpha: opacities[dir]
-                        })
-                    ]
-                )
-            )
-            matchUtilities(
-                {
-                    elevation(value) {
-                        return {
-                            boxShadow: allDirections.map(dir => {
-                                const numeric = parseFloat(value)
-                                if (isNaN(numeric) || !isFinite(numeric)) return
-                                return boxShadow(dir, numeric, `var(${varPrefix}-${directionNames[dir]}, ${defaultColors[dir]})`)
-                            }).join(', ')
-                        }
-                    },
-                },
-                {values: flattenColorPalette(theme('elevation')), type: ['number']}
-            )
-            matchUtilities(
-                {
-                    elevation(color) {
-                        const parsed = parseColor(color)
-                        return Object.fromEntries(
-                            allDirections.map(dir => [
-                                    `${varPrefix}-${directionNames[dir]}`,
-                                    formatColor({
-                                        ...parsed,
-                                        alpha: opacities[dir]
-                                    })
-                                ]
-                            )
-                        )
-                    }
-                },
-                {values: flattenColorPalette(theme('elevationColor')), type: ['color']}
-            )
+    const color = config(`${configName}.baselineColor`) ?? defaultColor
+    const parsed = parseColor(color)
+    const opacities = Object.fromEntries(
+        allDirections.map(dir => [dir, config(`${configName}.opacity.${directionNames[dir]}`) ?? defaultOpacity[dir]])
+    )
+    const defaultColors = Object.fromEntries(
+        allDirections.map(dir => [
+                dir,
+                formatColor({
+                    ...opacities[dir],
+                    alpha: opacities[dir]
+                })
+            ]
+        )
+    )
+    matchUtilities(
+        {
+            elevation(value) {
+                return {
+                    boxShadow: allDirections.map(dir => {
+                        const numeric = parseFloat(value)
+                        if (isNaN(numeric) || !isFinite(numeric)) return
+                        return boxShadow(dir, numeric, `var(${varPrefix}-${directionNames[dir]}, ${defaultColors[dir]})`)
+                    }).join(', ')
+                }
+            },
+        },
+        {
+            values: Object.fromEntries([...Array(elevationLimit).keys()].map(elevation => [elevation, String(elevation)])),
+            type: ['number']
         }
-    ]
+    )
+    matchUtilities(
+        {
+            elevation(color) {
+                const parsed = parseColor(color)
+                return Object.fromEntries(
+                    allDirections.map(dir => [
+                            `${varPrefix}-${directionNames[dir]}`,
+                            formatColor({
+                                ...parsed,
+                                alpha: opacities[dir]
+                            })
+                        ]
+                    )
+                )
+            }
+        },
+        {values: flattenColorPalette(theme('colors')), type: ['color']}
+    )
 }
 
