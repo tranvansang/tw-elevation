@@ -64,7 +64,7 @@ export default ({matchUtilities, config, theme}) => {
         allDirections.map(dir => [
                 dir,
                 formatColor({
-                    ...opacities[dir],
+                    ...parsed,
                     alpha: opacities[dir]
                 })
             ]
