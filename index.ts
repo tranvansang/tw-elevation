@@ -22,7 +22,7 @@ import {
 	ShadowDirection,
 	shadowDirectionNames
 } from './config'
-import {hexToHSL} from './util'
+import {floatToStr, hexToHSL} from './util'
 
 const configName = 'twElevation'
 const baselineColorVarName = '--tw-elevation-baseline-color'
@@ -48,10 +48,10 @@ const boxShadow = (
 	}
 ) => [
 	'0px',
-	`${getShadowDimension(direction, elevation, ShadowDimension.yOffset).toFixed(2)}px`,
-	`${getShadowDimension(direction, elevation, ShadowDimension.blur).toFixed(2)}px`,
-	`${getShadowDimension(direction, elevation, ShadowDimension.spread).toFixed(2)}px`,
-	`hsla(var(${baselineColorVarName})/${config[`${shadowDirectionNames[direction]}Opacity`].toFixed(2)})`
+	`${floatToStr(getShadowDimension(direction, elevation, ShadowDimension.yOffset))}px`,
+	`${floatToStr(getShadowDimension(direction, elevation, ShadowDimension.blur))}px`,
+	`${floatToStr(getShadowDimension(direction, elevation, ShadowDimension.spread))}px`,
+	`hsla(var(${baselineColorVarName})/${floatToStr(config[`${shadowDirectionNames[direction]}Opacity`])})`
 ].join(' ')
 
 export default ({matchUtilities, config, addBase}) => {

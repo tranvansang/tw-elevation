@@ -1,3 +1,12 @@
+export const floatToStr = (f: number, ndigit = 2) => {
+	const str = f.toFixed(ndigit)
+	return ndigit
+		? str
+			.replace(/0*$/g, '')
+			.replace(/\.$/, '')
+		: str
+}
+
 // https://github.com/saadeghi/daisyui/blob/69030663f84be517651260be4c55fd331b32c6f1/src/colors/hex2hsl.js
 export const hexToHSL = (H: string) => {
 	// Convert hex to RGB first
@@ -34,8 +43,8 @@ export const hexToHSL = (H: string) => {
 
 	let l = (cmax + cmin) / 2
 	let s = delta === 0 ? 0 : delta / (1 - Math.abs(2 * l - 1))
-	s = +(s * 100).toFixed(1)
-	l = +(l * 100).toFixed(1)
+	s *=  100
+	l *= 100
 
-	return `${h} ${s}% ${l}%`
+	return `${h} ${floatToStr(s, 1)}% ${floatToStr(l, 1)}%`
 }
