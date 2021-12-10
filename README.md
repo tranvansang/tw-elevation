@@ -13,7 +13,8 @@ export default {
 }
 ```
 
-- Class names: `.elevation-[0]`, `.elevation-[1]`, ...
+- Class names: `.elevation-0`, `.elevation-1`, up to `.elevation-24`.
+- JIT class names: `.elevation-[0]`, `.elevation-[1]`, ... Arbitrary values are supported.
 - To change baseline color, use class: `.elevation-[#888]`.
 - All themed colors are support: `.elevation-red-500`.
 - For color with opacity, for example: `.elevation-red-500/50`, the opacity will be ignored.
