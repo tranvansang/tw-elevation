@@ -1,6 +1,6 @@
 {
   "name": "tw-elevation",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "description": "tailwindcss elevation plugin",
   "main": "index.js",
   "repository": "https://github.com/tranvansang/tw-elevation.git",

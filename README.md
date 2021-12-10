@@ -8,7 +8,7 @@
 export default {
 	mode: 'jit',
 	plugins: [
-		require('tailwindcss/plugin')
+		require('tw-elevation')
 	],
 }
 ```
