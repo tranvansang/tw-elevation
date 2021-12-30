@@ -21,21 +21,9 @@ import {
 	Direction,
 	directionNames,
 	elevationLimit,
-	predefinedShadowDimension,
-	shadowDimensionRegressionCoefficients
+	getDimension
 } from './config'
 import {flattenColorPalette, floatToStr, formatColor, parseColor} from './util'
-
-const getDimension = (
-	dir: Direction,
-	level: number,
-	dimension: Dimension
-): number => {
-	const predefinedValues = predefinedShadowDimension[dir][dimension]
-	if (level < predefinedValues.length && level >= 0) return predefinedValues[level]
-	const {intercept, alpha} = shadowDimensionRegressionCoefficients[dir][dimension]
-	return intercept + alpha * level
-}
 
 const boxShadow = (
 	dir: Direction,

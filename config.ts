@@ -1,28 +1,45 @@
 // https://github.com/material-components/material-components-web/blob/2fb068fb0f7a1b0e038ede3a2ab27a972e5b2ee4/packages/mdc-elevation/_elevation-theme.scss#L42
-const umbraY = [0, 2, 3, 3, 2, 3, 3, 4, 5, 5, 6, 6, 7, 7, 7, 8, 8, 8, 9, 9, 10, 10, 10, 11, 11]
-const umbraBlur = [0, 1, 1, 3, 4, 5, 5, 5, 5, 6, 6, 7, 8, 8, 9, 9, 10, 11, 11, 12, 13, 13, 14, 14, 15]
-const umbraSpread = [0, -1, -2, -2, -1, -1, -1, -2, -3, -3, -3, -4, -4, -4, -4, -5, -5, -5, -5, -6, -6, -6, -6, -7, -7]
+const hardcodedElevation = [
+	[[0, 0, 0], [0, 0, 0], [0, 0, 0]],
+	[[2, 1, -1], [1, 1, 0], [1, 3, 0]],
+	[[3, 1, -2], [2, 2, 0], [1, 5, 0]],
+	[[3, 3, -2], [3, 4, 0], [1, 8, 0]],
+	[[2, 4, -1], [4, 5, 0], [1, 10, 0]],
+	[[3, 5, -1], [5, 8, 0], [1, 14, 0]],
+	[[3, 5, -1], [6, 10, 0], [1, 18, 0]],
+	[[4, 5, -2], [7, 10, 1], [2, 16, 1]],
+	[[5, 5, -3], [8, 10, 1], [3, 14, 2]],
+	[[5, 6, -3], [9, 12, 1], [3, 16, 2]],
+	[[6, 6, -3], [10, 14, 1], [4, 18, 3]],
+	[[6, 7, -4], [11, 15, 1], [4, 20, 3]],
+	[[7, 8, -4], [12, 17, 2], [5, 22, 4]],
+	[[7, 8, -4], [13, 19, 2], [5, 24, 4]],
+	[[7, 9, -4], [14, 21, 2], [5, 26, 4]],
+	[[8, 9, -5], [15, 22, 2], [6, 28, 5]],
+	[[8, 10, -5], [16, 24, 2], [6, 30, 5]],
+	[[8, 11, -5], [17, 26, 2], [6, 32, 5]],
+	[[9, 11, -5], [18, 28, 2], [7, 34, 6]],
+	[[9, 12, -6], [19, 29, 2], [7, 36, 6]],
+	[[10, 13, -6], [20, 31, 3], [8, 38, 7]],
+	[[10, 13, -6], [21, 33, 3], [8, 40, 7]],
+	[[10, 14, -6], [22, 35, 3], [8, 42, 7]],
+	[[11, 14, -7], [23, 36, 3], [9, 44, 8]],
+	[[11, 15, -7], [24, 38, 3], [9, 46, 8]],
+]
 
-const penumbraY = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
-const penumbraBlur = [0, 1, 2, 4, 5, 8, 10, 10, 10, 12, 14, 15, 17, 19, 21, 22, 24, 26, 28, 29, 31, 33, 35, 36, 38]
-const penumbraSpread = [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3]
-
-const ambientY = [0, 1, 1, 1, 1, 1, 1, 2, 3, 3, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 8, 8, 8, 9, 9]
-const ambientBlur = [0, 3, 5, 8, 10, 14, 18, 16, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46]
-const ambientSpread = [0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 7, 7, 7, 8, 8]
+const directionIndices = {
+	[Direction.umbra]: 0,
+	[Direction.penumbra]: 1,
+	[Direction.ambient]: 2,
+}
+const dimensionIndices = {
+	[Dimension.yOffset]: 0,
+	[Dimension.blur]: 1,
+	[Dimension.spread]: 2,
+}
 
 // 25
-export const elevationLimit = Math.min(
-	umbraY.length,
-	umbraBlur.length,
-	umbraSpread.length,
-	penumbraY.length,
-	penumbraBlur.length,
-	penumbraSpread.length,
-	ambientY.length,
-	ambientBlur.length,
-	ambientSpread.length,
-)
+export const elevationLimit = hardcodedElevation.length
 
 // https://en.wikipedia.org/wiki/Umbra,_penumbra_and_antumbra
 // https://www.youtube.com/watch?v=SvSHx3XWRik
@@ -53,24 +70,6 @@ export const enum Dimension {
 	spread,
 }
 
-export const predefinedShadowDimension = {
-	[Direction.umbra]: {
-		[Dimension.yOffset]: umbraY,
-		[Dimension.blur]: umbraBlur,
-		[Dimension.spread]: umbraSpread,
-	},
-	[Direction.penumbra]: {
-		[Dimension.yOffset]: penumbraY,
-		[Dimension.blur]: penumbraBlur,
-		[Dimension.spread]: penumbraSpread,
-	},
-	[Direction.ambient]: {
-		[Dimension.yOffset]: ambientY,
-		[Dimension.blur]: ambientBlur,
-		[Dimension.spread]: ambientSpread,
-	},
-} as const
-
 export const shadowDimensionRegressionCoefficients = {
 	[Direction.umbra]: {
 		[Dimension.yOffset]: {intercept: 1.0770563, alpha: 0.4298701},
@@ -96,4 +95,15 @@ export const defaultOpacity = {
 	[Direction.umbra]: .2,
 	[Direction.penumbra]: .14,
 	[Direction.ambient]: .12,
+}
+export const getDimension = (
+	dir: Direction,
+	level: number,
+	dimension: Dimension
+): number => {
+	if (
+		level < hardcodedElevation.length && level >= 0
+	) return hardcodedElevation[level][directionIndices[dir]][dimensionIndices[dimension]]
+	const {intercept, alpha} = shadowDimensionRegressionCoefficients[dir][dimension]
+	return intercept + alpha * level
 }
