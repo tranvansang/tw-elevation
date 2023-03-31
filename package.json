@@ -7,13 +7,16 @@
 	"files": [
 		"index.js",
 		"index.d.ts",
+		"index.js.map",
 		"config.js",
 		"config.d.ts",
+		"config.js.map",
 		"util.js",
-		"util.d.ts"
+		"util.d.ts",
+		"util.js.map"
 	],
 	"scripts": {
-		"build": "rm -rf index.d.ts index.js && tsc --downlevelIteration --declaration --esModuleInterop --outDir . --lib esnext index.ts --skipLibCheck"
+		"build": "rm -rf index.d.ts index.js.map index.js config.js config.js.map config.d.ts util.js util.d.ts util.js.map && tsc --downlevelIteration --declaration --sourceMap --esModuleInterop --outDir . --lib esnext index.ts --skipLibCheck"
 	},
 	"author": "Tran Sang <me@transa.ng>",
 	"license": "MIT",
