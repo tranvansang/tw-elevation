@@ -22,8 +22,8 @@ import {
 	directionNames,
 	elevationLimit,
 	getDimension
-} from './config'
-import {flattenColorPalette, floatToStr, formatColor, parseColor} from './util'
+} from './config.js'
+import {flattenColorPalette, floatToStr, formatColor, parseColor} from './util.js'
 
 const boxShadow = (
 	dir: Direction,

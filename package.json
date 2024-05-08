@@ -1,6 +1,6 @@
 {
 	"name": "tw-elevation",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"description": "tailwindcss elevation plugin",
 	"main": "index.js",
 	"repository": "https://github.com/tranvansang/tw-elevation.git",
@@ -10,10 +10,18 @@
 		"config.js",
 		"config.d.ts",
 		"util.js",
-		"util.d.ts"
+		"util.d.ts",
+		"cjs"
 	],
+	"exports": {
+		".": {
+			"import": "./index.js",
+			"require": "./cjs/index.js"
+		}
+	},
+	"type": "module",
 	"scripts": {
-		"prepublish": "rm -rf index.d.ts index.js config.js config.d.ts util.js util.d.ts && tsc --target esnext --module commonjs --downlevelIteration --declaration --inlineSourceMap --esModuleInterop --outDir . --lib esnext index.ts --skipLibCheck"
+		"prepublishOnly": "rm -rf index.d.ts index.js config.js config.d.ts util.js util.d.ts && tsc --target esnext --module commonjs --downlevelIteration --declaration --inlineSourceMap --esModuleInterop --outDir . --lib esnext index.ts --skipLibCheck"
 	},
 	"author": "Sang Tran <t@sang.jp>",
 	"license": "MIT",
