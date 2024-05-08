@@ -21,7 +21,7 @@
 	},
 	"type": "module",
 	"scripts": {
-		"prepublishOnly": "./compiles.sh"
+		"prepublishOnly": "./compile.sh"
 	},
 	"author": "Sang Tran <t@sang.jp>",
 	"license": "MIT",
