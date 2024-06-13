@@ -34,41 +34,31 @@ let RGB_HSL = new RegExp(
 )
 
 export function parseColor(value) {
-	if (typeof value !== 'string') {
-		return null
-	}
+	if (typeof value !== 'string') return null
 
 	value = value.trim()
-	if (value === 'transparent') {
-		return { mode: 'rgb', color: ['0', '0', '0'], alpha: '0' }
-	}
+	if (value === 'transparent') return { mode: 'rgb', color: ['0', '0', '0'], alpha: '0' }
 
-	if (value in namedColors) {
-		return { mode: 'rgb', color: namedColors[value].map((v) => v.toString()) }
-	}
+	if (value in namedColors) return { mode: 'rgb', color: namedColors[value].map((v) => v.toString()) }
 
 	let hex = value
 		.replace(SHORT_HEX, (_, r, g, b, a) => ['#', r, r, g, g, b, b, a ? a + a : ''].join(''))
 		.match(HEX)
 
-	if (hex !== null) {
-		return {
-			mode: 'rgb',
-			color: [parseInt(hex[1], 16), parseInt(hex[2], 16), parseInt(hex[3], 16)].map((v) =>
-				v.toString()
-			),
-			alpha: hex[4] ? (parseInt(hex[4], 16) / 255).toString() : undefined,
-		}
+	if (hex !== null) return {
+		mode: 'rgb',
+		color: [parseInt(hex[1], 16), parseInt(hex[2], 16), parseInt(hex[3], 16)].map((v) =>
+			v.toString()
+		),
+		alpha: hex[4] ? (parseInt(hex[4], 16) / 255).toString() : undefined,
 	}
 
 	let match = value.match(RGB_HSL)
 
-	if (match !== null) {
-		return {
-			mode: match[1],
-			color: [match[2], match[3], match[4]].map((v) => v.toString()),
-			alpha: match[5]?.toString?.(),
-		}
+	if (match !== null) return {
+		mode: match[1],
+		color: [match[2], match[3], match[4]].map((v) => v.toString()),
+		alpha: match[5]?.toString?.(),
 	}
 
 	return null

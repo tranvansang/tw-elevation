@@ -79,12 +79,14 @@ export default ({matchUtilities, config, theme}) => {
 		{
 			elevation(color) {
 				const parsed = parseColor(color)
+				let alpha = parseFloat(parsed?.alpha ?? '1')
+				if (isNaN(alpha) || !isFinite(alpha)) alpha = 1
 				return Object.fromEntries(
 					allDirections.map(dir => [
 							`${varPrefix}-${directionNames[dir]}`,
 							formatColor({
 								...parsed,
-								alpha: opacities[dir]
+								alpha: Math.min(Math.max(0, opacities[dir] * alpha), 1)
 							})
 						]
 					)
